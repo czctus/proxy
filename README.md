@@ -16,13 +16,13 @@ These are some examples you can use to get started
 ### Set User Agent
 ```lua
 require(path.to.proxy).get('https://api.perox.dev/self-headers', {headers={["C-User-Agent"]="CustomUserAgent"}})
-  :ready(function(data)
-  	print(data.Body)
-  end)
-  :catch(function(err)
-  	warn("Failed to get headers: "..err)
-  end)
-  :go()
+	:ready(function(data)
+		print(data.Body)
+	end)
+	:catch(function(err)
+		warn("Failed to get headers: "..err)
+	end)
+  	:go()
 ```
 ### Set Body Text
 ```lua

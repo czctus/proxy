@@ -1,6 +1,9 @@
 # proxy
 An module for Roblox that allows for proxying HTTP requests in a promise based system.
 
+**Note, You shouldnt send sensitive info over this module!**
+**Its safe as far as we know, but we are not responsible for damages.**
+
 ## Module Setup
 1. Get the most recent release [Here](https://github.com/czctus/proxy/releases)
 2. Move the module anywhere
@@ -35,3 +38,6 @@ require(script.Parent.proxy).post('https://api.perox.dev/', {body="Some body tex
 	end)
 	:go()
 ```
+
+## Licensing
+This project is licensed under the MIT License.

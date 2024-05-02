@@ -1,3 +1,5 @@
+--!strict
+
 --@name proxy
 --@description proxy is a module that allows for proxying HTTP requests in a promise based system.
 --@source https://github.com/czctus/proxy
@@ -20,18 +22,33 @@ end)
 
 --if you have any issues you can dm czctus on discord or email vvv@perox.dev
 
+type Headers = { [string]: string }
+type RequestOptions = {
+	headers: Headers?,
+	body: string?
+}
+type RequestMethod = "GET" | "POST" | "DELETE" | "PATCH" | "PUT"
+
+local METHODS = {
+	GET = "GET",
+	POST = "POST",
+	DELETE = "DELETE",
+	PATCH = "PATCH",
+	PUT = "PUT",
+}
+
 local proxyUrl = "https://api.perox.dev/proxy"
 local module = {}
 local http = game:GetService('HttpService')
 
-local function createUrl(url, method)
+local function createUrl(url, method: RequestMethod)
 	local proxied = proxyUrl
 	url = http:UrlEncode(url)
 	proxied = proxied .. "?url=" .. url .. "&method=" .. string.upper(method)
 	return proxied
 end
 
-local function createProxyType(method, url:string, options:{})
+local function createProxyType(method: RequestMethod, url:string, options: RequestOptions)
 	local stack = {}
 	stack.meta = {}
 	stack.options = options or {}
@@ -54,7 +71,7 @@ local function createProxyType(method, url:string, options:{})
 			local s, r = pcall(function()
 				return http:RequestAsync({
 					Url = url,
-					Method = "POST",
+					Method = METHODS.POST,
 					Headers = stack.options.headers or {},
 					Body = stack.options.body or nil
 				})
@@ -83,24 +100,24 @@ local function createProxyType(method, url:string, options:{})
 	return stack
 end
 
-function module.get(url: string, options: { headers: { [string]: string }?, body: string? }?)
-	return createProxyType("GET", url, options)
+function module.get(url: string, options: RequestOptions?)
+	return createProxyType(METHODS.GET, url, options)
 end
 
-function module.post(url: string, options: { headers: { [string]: string }?, body: string? }?)
-	return createProxyType("POST", url, options)
+function module.post(url: string, options: RequestOptions?)
+	return createProxyType(METHODS.POST, url, options)
 end
 
-function module.delete(url: string, options: { headers: { [string]: string }?, body: string? }?)
-	return createProxyType("DELETE", url, options)
+function module.delete(url: string, options: RequestOptions?)
+	return createProxyType(METHODS.DELETE, url, options)
 end
 
-function module.put(url: string, options: { headers: { [string]: string }?, body: string? }?)
-	return createProxyType("PUT", url, options)
+function module.put(url: string, options: RequestOptions?)
+	return createProxyType(METHODS.PUT, url, options)
 end
 
-function module.patch(url: string, options: { headers: { [string]: string }?, body: string? }?)
-	return createProxyType("PATCH", url, options)
+function module.patch(url: string, options: RequestOptions?)
+	return createProxyType(METHODS.PATCH, url, options)
 end
 
 function module.setProxy(url:string)
